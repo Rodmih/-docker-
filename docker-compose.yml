@@ -1,0 +1,31 @@
+services:
+  www:
+    build: .
+    ports:
+      - "8001:80"
+    volumes:
+      - ./www:/var/www/html
+    depends_on:
+      - db
+      - postgres
+
+  db:
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_DATABASE: myDb
+      MYSQL_USER: user
+      MYSQL_PASSWORD: test
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - ./dump:/docker-entrypoint-initdb.d
+
+  postgres:
+    image: postgres:13
+    restart: always
+    environment:
+      POSTGRES_DB: pgdb
+      POSTGRES_USER: pguser
+      POSTGRES_PASSWORD: pgpass
+    volumes:
+      - ./dump:/docker-entrypoint-initdb.d
